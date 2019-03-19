@@ -23,6 +23,10 @@
 # cmakeit_compiler_detection.cmake - detect toolset used to build project
 #
 
+include(CheckPIESupported)
+
+check_pie_supported()
+
 if(NOT CMAKEIT_HIDE_BANNER)
 	message(STATUS "Detecting compiler used for building...")
 endif()
