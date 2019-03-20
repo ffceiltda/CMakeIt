@@ -981,6 +981,14 @@ function(cmakeit_target_apply_build_properties IS_UNITTEST UNITTEST_NAME)
 		target_compile_options(${TARGET_NAME} PRIVATE "-frtti")
 		target_compile_options(${TARGET_NAME} PRIVATE "-fexceptions")
 
+		if((NOT CMAKEIT_MODULE_C_EXTENSIONS) AND (NOT CMAKEIT_MODULE_CXX_EXTENSIONS))
+			
+			target_compile_options(${TARGET_NAME} PRIVATE "-ansi")
+			target_compile_options(${TARGET_NAME} PRIVATE "-pedantic")
+			target_compile_options(${TARGET_NAME} PRIVATE "-pedantic-errors")
+
+		endif()
+
 		if(NOT CMAKEIT_MODULE_NO_SPECTRE_MITIGATIONS)
 			
 			if(CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_CLANG})
