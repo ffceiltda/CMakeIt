@@ -656,8 +656,14 @@ function(cmakeit_target_apply_build_properties IS_UNITTEST UNITTEST_NAME)
 
 	set_target_properties(${TARGET_NAME} PROPERTIES 
 		LINKER_LANGUAGE CXX
-		POSITION_INDEPENDENT_CODE ON
-		INTERPROCEDURAL_OPTIMIZATION ON)
+		POSITION_INDEPENDENT_CODE ON)
+
+	if(NOT MINGW)
+
+		set_target_properties(${TARGET_NAME} PROPERTIES 
+			INTERPROCEDURAL_OPTIMIZATION ON)
+			
+	endif()
 
 	if(CMAKEIT_MODULE_C_EXTENSIONS)
 
@@ -930,7 +936,9 @@ function(cmakeit_target_apply_build_properties IS_UNITTEST UNITTEST_NAME)
 			set(TARGET_LINKER_FLAGS "/SUBSYSTEM:CONSOLE ${TARGET_LINKER_FLAGS}")
 		endif()
 		
-	elseif(FOO AND (CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_CLANG}) OR (CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_GCC}))
+	elseif((CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_CLANG}) OR (CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_GCC}))
+
+		target_compile_definitions(${TARGET_NAME} PRIVATE "_REENTRANT")
 
 		target_compile_options(${TARGET_NAME} PRIVATE "-Wall")
 		target_compile_options(${TARGET_NAME} PRIVATE "-Wextra")
@@ -939,10 +947,18 @@ function(cmakeit_target_apply_build_properties IS_UNITTEST UNITTEST_NAME)
 
 		if(NOT MINGW)
 		
-			target_compile_options(${TARGET_NAME} PRIVATE "-fstack-protector")
+			target_compile_options(${TARGET_NAME} PRIVATE "-fstack-protector-strong")
 
-			set(TARGET_LINKER_FLAGS "-fstack-protector ${TARGET_LINKER_FLAGS}")
+			set(TARGET_LINKER_FLAGS "-fstack-protector-strong ${TARGET_LINKER_FLAGS}")
+
+			if(CMAKEIT_TARGET_PLATFORM_VARIANT STREQUAL ${CMAKEIT_TARGET_PLATFORM_VARIANT_UNIX_LINUX})
 			
+				target_compile_options(${TARGET_NAME} PRIVATE "-pthread")
+				
+				set(TARGET_LINKER_FLAGS "-pthread -lpthread -ldl -lrt ${TARGET_LINKER_FLAGS}")
+				
+			endif()
+
 		endif()
 
 		if((CMAKEIT_BUILD_TYPE STREQUAL ${CMAKEIT_BUILD_TYPE_DEBUG}) OR (CMAKEIT_BUILD_TYPE STREQUAL ${CMAKEIT_BUILD_TYPE_RELWITHDEBINFO}))		
@@ -1092,7 +1108,11 @@ function(cmakeit_target_apply_build_properties IS_UNITTEST UNITTEST_NAME)
 			if(TARGET_MODULE_PCH_NEED_PIC)
 				
 				if(IS_UNITTEST OR (CMAKEIT_MODULE_TYPE STREQUAL ${CMAKEIT_MODULE_TYPE_APPLICATION}))
-					set(TARGET_MODULE_PCH_PIC_FLAGS "${TARGET_MODULE_PCH_PIC_FLAGS}-fPIE")
+				
+					if(CMAKE_CXX_LINK_PIE_SUPPORTED)
+						set(TARGET_MODULE_PCH_PIC_FLAGS "${TARGET_MODULE_PCH_PIC_FLAGS}-fPIE")
+					endif()
+					
 				else()
 					set(TARGET_MODULE_PCH_PIC_FLAGS "${TARGET_MODULE_PCH_PIC_FLAGS}-fPIC")
 				endif()
@@ -1105,6 +1125,10 @@ function(cmakeit_target_apply_build_properties IS_UNITTEST UNITTEST_NAME)
 
 				if(CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_GCC})
 					set(TARGET_MODULE_PCH_LTO_FLAGS "${TARGET_MODULE_PCH_LTO_FLAGS}\n-fno-fat-lto-objects")
+				endif()
+				
+				if(CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_CLANG})
+					set(TARGET_MODULE_PCH_LTO_FLAGS "${TARGET_MODULE_PCH_LTO_FLAGS}=thin")
 				endif()
 
 			endif()

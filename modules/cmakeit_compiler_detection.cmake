@@ -23,6 +23,10 @@
 # cmakeit_compiler_detection.cmake - detect toolset used to build project
 #
 
+include(CheckPIESupported)
+
+check_pie_supported()
+
 if(NOT CMAKEIT_HIDE_BANNER)
 	message(STATUS "Detecting compiler used for building...")
 endif()
@@ -104,7 +108,11 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 	if(NOT CMAKEIT_COMPILER)
 	
 		set(CMAKEIT_COMPILER ${CMAKEIT_COMPILER_GCC})
-		set(CMAKEIT_COMPILER_PCH_SUFFIX ${CMAKEIT_COMPILER_PCH_SUFFIX_GCC})
+		
+		# Disable PCH on MinGW
+		if(NOT MINGW)
+			set(CMAKEIT_COMPILER_PCH_SUFFIX ${CMAKEIT_COMPILER_PCH_SUFFIX_GCC})
+		endif()
 
 		# 'Patch' ar / ranlib utilities to correctly link
 		if(CMAKE_AR STREQUAL "ar")
