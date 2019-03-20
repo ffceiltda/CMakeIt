@@ -908,6 +908,10 @@ function(cmakeit_target_apply_build_properties IS_UNITTEST UNITTEST_NAME)
 		target_compile_options(${TARGET_NAME} PRIVATE "/sdl")
 		target_compile_options(${TARGET_NAME} PRIVATE "/guard:cf")
 
+		if(NOT CMAKEIT_MODULE_NO_SPECTRE_MITIGATIONS)
+			target_compile_options(${TARGET_NAME} PRIVATE "/Qspectre")
+		endif()
+
 		if(CMAKEIT_TARGET_ARCHITECTURE STREQUAL ${CMAKEIT_TARGET_ARCHITECTURE_INTEL_X86})
 			target_compile_options(${TARGET_NAME} PRIVATE "/Oy-")
 		endif()
@@ -929,10 +933,22 @@ function(cmakeit_target_apply_build_properties IS_UNITTEST UNITTEST_NAME)
 			target_compile_options(${TARGET_NAME} PRIVATE "/Gm-")
 			target_compile_options(${TARGET_NAME} PRIVATE "/Oi")
 			target_compile_options(${TARGET_NAME} PRIVATE "/GL")
-			target_compile_options(${TARGET_NAME} PRIVATE "/Gy")
 
-			set(TARGET_STATIC_LIBRARY_LINKER_FLAGS "/LTCG ${TARGET_STATIC_LIBRARY_LINKER_FLAGS}")
-			set(TARGET_LINKER_FLAGS "/LTCG /OPT:REF /OPT:ICF ${TARGET_LINKER_FLAGS}")
+			set(TARGET_LINKER_FLAGS "/OPT:REF /OPT:ICF ${TARGET_LINKER_FLAGS}")
+
+			get_target_property(TARGET_MODULE_PCH_NEED_PIC ${TARGET_NAME} POSITION_INDEPENDENT_CODE)
+			get_target_property(TARGET_MODULE_PCH_NEED_LTO ${TARGET_NAME} INTERPROCEDURAL_OPTIMIZATION)
+	
+			if(TARGET_MODULE_PCH_NEED_PIC)
+				target_compile_options(${TARGET_NAME} PRIVATE "/Gy")
+			endif()
+
+			if(TARGET_MODULE_PCH_NEED_LTO)
+			
+				set(TARGET_STATIC_LIBRARY_LINKER_FLAGS "/LTCG ${TARGET_STATIC_LIBRARY_LINKER_FLAGS}")
+				set(TARGET_LINKER_FLAGS "/LTCG ${TARGET_LINKER_FLAGS}")
+			
+				endif()
 			
 		endif()
 		
@@ -948,6 +964,36 @@ function(cmakeit_target_apply_build_properties IS_UNITTEST UNITTEST_NAME)
 		target_compile_options(${TARGET_NAME} PRIVATE "-Wextra")
 		target_compile_options(${TARGET_NAME} PRIVATE "-frtti")
 		target_compile_options(${TARGET_NAME} PRIVATE "-fexceptions")
+
+		if(NOT CMAKEIT_MODULE_NO_SPECTRE_MITIGATIONS)
+			
+			if(CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_CLANG})
+				
+				target_compile_options(${TARGET_NAME} PRIVATE "-mretpoline")
+
+				if(CMAKEIT_COMPILER_SPECTRE_MITIGATIONS_ADVANCED)
+					target_compile_options(${TARGET_NAME} PRIVATE "-mspeculative-load-hardening")
+				endif()
+
+			endif()
+			
+			if(CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_GCC})
+
+				if((CMAKEIT_TARGET_ARCHITECTURE STREQUAL ${CMAKEIT_TARGET_ARCHITECTURE_INTEL_X86}) OR (CMAKEIT_TARGET_ARCHITECTURE STREQUAL ${CMAKEIT_TARGET_ARCHITECTURE_INTEL_X64}))
+
+					target_compile_options(${TARGET_NAME} PRIVATE "-mindirect-branch=thunk")
+					target_compile_options(${TARGET_NAME} PRIVATE "-mindirect-branch-register")
+					target_compile_options(${TARGET_NAME} PRIVATE "-mfunction-return=thunk")
+
+				elseif((CMAKEIT_TARGET_ARCHITECTURE STREQUAL ${CMAKEIT_TARGET_ARCHITECTURE_INTEL_ARM64}))
+
+					target_compile_options(${TARGET_NAME} PRIVATE "-mtrack-speculation")
+
+				endif()
+
+			endif()
+
+		endif()
 
 		if(NOT MINGW)
 		

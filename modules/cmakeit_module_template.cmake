@@ -162,6 +162,15 @@ else()
 endif()
 
 #
+# CMAKEIT_MODULE_NO_SPECTRE_MITIGATIONS (optional) - if ON, CMakeIt doesn't try to add SPECTRE mitigation flags
+#
+if(CMAKEIT_COMPILER_NO_SPECTRE_MITIGATIONS)
+	set(CMAKEIT_MODULE_NO_SPECTRE_MITIGATIONS ON)
+else()
+	unset(CMAKEIT_MODULE_NO_SPECTRE_MITIGATIONS)
+endif()
+
+#
 # CMAKEIT_MODULE_NO_UNICODE (optional) - if ON, CMakeIt doesn't try to use Unicode API versions in Windows targets
 #
 if(NOT CMAKEIT_MODULE_NO_UNICODE)

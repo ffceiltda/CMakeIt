@@ -29,6 +29,7 @@ include(cmakeit_toolset_detection)
 include(cmakeit_target_architecture_detection)
 include(cmakeit_build_type_detection)
 include(cmakeit_pch_detection)
+include(cmakeit_spectre_mitigations_detection)
 
 if(NOT CMAKEIT_HIDE_BANNER)
 
@@ -36,11 +37,15 @@ if(NOT CMAKEIT_HIDE_BANNER)
 		set(INTERNAL_CMAKEIT_PCH_SUPPORT " (with pre-compiled headers support)")
 	endif()
 
+	if(NOT CMAKEIT_COMPILER_NO_SPECTRE_MITIGATIONS)
+		set(INTERNAL_CMAKEIT_SPECTRE_MITIGATIONS_SUPPORT " (with SPECTRE mitigations support)")
+	endif()
+
 	string(SUBSTRING ${CMAKEIT_COMPILER_C_STANDARD} 3 3 INTERNAL_COMPILER_C_STANDARD)
 	string(SUBSTRING ${CMAKEIT_COMPILER_CXX_STANDARD} 3 5 INTERNAL_COMPILER_CXX_STANDARD)
 	
 	message(STATUS "")
-	message(STATUS "Using ${CMAKEIT_TOOLSET} toolset [using ${CMAKEIT_COMPILER} compiler, standard support is ${INTERNAL_COMPILER_CXX_STANDARD}, ${INTERNAL_COMPILER_C_STANDARD}${INTERNAL_CMAKEIT_PCH_SUPPORT}]")
+	message(STATUS "Using ${CMAKEIT_TOOLSET} toolset [using ${CMAKEIT_COMPILER} compiler, standard support is ${INTERNAL_COMPILER_CXX_STANDARD}, ${INTERNAL_COMPILER_C_STANDARD}${INTERNAL_CMAKEIT_PCH_SUPPORT}${INTERNAL_CMAKEIT_SPECTRE_MITIGATIONS_SUPPORT}]")
 	message(STATUS "Targetting ${CMAKEIT_TARGET_PLATFORM} plataform [${CMAKEIT_TARGET_PLATFORM_VARIANT} variant on ${CMAKEIT_TARGET_ARCHITECTURE} architecture]")
 	message(STATUS "Building ${CMAKEIT_BUILD_TYPE} configuration")
 	message(STATUS "")
@@ -48,5 +53,6 @@ if(NOT CMAKEIT_HIDE_BANNER)
 	unset(INTERNAL_COMPILER_C_STANDARD)
 	unset(INTERNAL_COMPILER_CXX_STANDARD)
 	unset(INTERNAL_CMAKEIT_PCH_SUPPORT)
+	unset(INTERNAL_CMAKEIT_SPECTRE_MITIGATIONS_SUPPORT)
 
 endif()
