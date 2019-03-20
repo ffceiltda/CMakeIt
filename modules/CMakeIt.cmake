@@ -48,11 +48,11 @@ include(cmakeit_constants)
 # Shows banner of CMake when called (and not configured to hide)
 include(cmakeit_banner)
 
-# Perform detection of toolset, compiler and target that will be used for build
-include(cmakeit_detection)
-
 # Include custom CMakeIt functions
 include(cmakeit_functions)
+
+# Perform detection of toolset, compiler and target that will be used for build
+include(cmakeit_detection)
 
 # Define CMAKEIT_INCLUDED for next phase of build scripts
 set(CMAKEIT_INCLUDED ON)
