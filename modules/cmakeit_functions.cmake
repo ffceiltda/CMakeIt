@@ -1189,8 +1189,6 @@ endfunction()
 #
 function(cmakeit_match_target_architecture MATCH_STRING)
 
-	message(STATUS "cmakeit_match_target_architecture ${MATCH_STRING}")
-
 	if((NOT CMAKEIT_TARGET_ARCHITECTURE) AND MATCH_STRING)
 
 		string(REGEX MATCH "i686" INTERNAL_CMAKEIT_DETECT_TARGET_ARCHITECTURE_I686 ${MATCH_STRING})
