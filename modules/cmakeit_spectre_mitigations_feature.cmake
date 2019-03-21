@@ -110,7 +110,9 @@ if(NOT CMAKEIT_COMPILER_NO_SPECTRE_MITIGATIONS)
     unset(CMAKEIT_COMPILER_SPECTRE_MITIGATION_COMPILER_FLAGS)
     unset(CMAKEIT_COMPILER_SPECTRE_MITIGATION_LINKER_FLAGS)
 
-    message(STATUS "Detecting if compiler support SPECTRE mitigations...")
+    if(NOT INTERNAL_CMAKEIT_REQUIRED_QUIET)
+        message(STATUS "Detecting if compiler support SPECTRE mitigations...")
+    endif()
 
     if(CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_VISUAL_C})
         list(APPEND CMAKEIT_COMPILER_SPECTRE_MITIGATION_COMPILER_FLAGS "/Qspectre")
@@ -194,9 +196,12 @@ if(NOT CMAKEIT_COMPILER_NO_SPECTRE_MITIGATIONS)
 
     if(CMAKEIT_COMPILER_SPECTRE_MITIGATION_COMPILER_FLAGS)    
         
-        message(STATUS "Detecting if compiler support SPECTRE mitigations... - done")
+        if(NOT INTERNAL_CMAKEIT_REQUIRED_QUIET)
+        
+            message(STATUS "Detecting if compiler support SPECTRE mitigations... - done")
+            message(STATUS "Detecting if linker support SPECTRE mitigations...")
 
-        message(STATUS "Detecting if linker support SPECTRE mitigations...")
+        endif()
 
         if((CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_CLANG}) OR (CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_GCC}))
 
@@ -212,14 +217,22 @@ if(NOT CMAKEIT_COMPILER_NO_SPECTRE_MITIGATIONS)
         
         endif()
 
-        if(CMAKEIT_COMPILER_SPECTRE_MITIGATION_COMPILER_FLAGS)    
-            message(STATUS "Detecting if linker support SPECTRE mitigations... - done")
-        else()
-            message(STATUS "Detecting if linker support SPECTRE mitigations... - NOTFOUND")
-        endif()
+        if(NOT INTERNAL_CMAKEIT_REQUIRED_QUIET)
+
+            if(CMAKEIT_COMPILER_SPECTRE_MITIGATION_COMPILER_FLAGS)    
+                message(STATUS "Detecting if linker support SPECTRE mitigations... - done")
+            else()
+                message(STATUS "Detecting if linker support SPECTRE mitigations... - NOTFOUND")
+            endif()
         
+        endif()
+
     else()
-        message(STATUS "Detecting if compiler support SPECTRE mitigations... - NOTFOUND")
+
+        if(NOT INTERNAL_CMAKEIT_REQUIRED_QUIET)
+            message(STATUS "Detecting if compiler support SPECTRE mitigations... - NOTFOUND")
+        endif()
+
     endif()
 
     set(CMAKE_REQUIRED_QUIET ${INTERNAL_CMAKEIT_REQUIRED_QUIET})

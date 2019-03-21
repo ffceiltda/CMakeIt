@@ -61,17 +61,17 @@ include(cmakeit_constants)
 # Include external CMakeIt modules used
 include(cmakeit_external_modules)
 
-# Enable CMake policies
-include(cmakeit_policies)
-
-# Basic CMake features needed
-include(cmakeit_features)
-
 # Include custom CMakeIt functions
 include(cmakeit_functions)
 
+# Enable CMake policies
+include(cmakeit_policies)
+
 # Perform detection of toolset, compiler and target that will be used for build
 include(cmakeit_detection)
+
+# Basic CMake features needed
+include(cmakeit_features)
 
 # Define CMAKEIT_INCLUDED for next phase of build scripts
 set(CMAKEIT_INCLUDED ON)

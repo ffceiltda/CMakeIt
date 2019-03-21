@@ -27,3 +27,7 @@ include(cmakeit_pch_feature)
 include(cmakeit_pie_feature)
 include(cmakeit_thread_feature)
 include(cmakeit_spectre_mitigations_feature)
+
+if(NOT CMAKEIT_HIDE_BANNER)
+    message(STATUS "")
+endif()
