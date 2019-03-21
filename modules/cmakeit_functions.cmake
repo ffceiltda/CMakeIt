@@ -928,10 +928,6 @@ function(cmakeit_target_apply_build_properties IS_UNITTEST UNITTEST_NAME)
 		target_compile_options(${TARGET_NAME} PRIVATE "/sdl")
 		target_compile_options(${TARGET_NAME} PRIVATE "/guard:cf")
 
-		if(NOT CMAKEIT_MODULE_NO_SPECTRE_MITIGATIONS)
-			target_compile_options(${TARGET_NAME} PRIVATE "/Qspectre")
-		endif()
-
 		if(CMAKEIT_TARGET_ARCHITECTURE STREQUAL ${CMAKEIT_TARGET_ARCHITECTURE_INTEL_X86})
 			target_compile_options(${TARGET_NAME} PRIVATE "/Oy-")
 		endif()
@@ -990,44 +986,6 @@ function(cmakeit_target_apply_build_properties IS_UNITTEST UNITTEST_NAME)
 			target_compile_options(${TARGET_NAME} PRIVATE "-ansi")
 			target_compile_options(${TARGET_NAME} PRIVATE "-pedantic")
 			target_compile_options(${TARGET_NAME} PRIVATE "-pedantic-errors")
-
-		endif()
-
-		if(NOT CMAKEIT_MODULE_NO_SPECTRE_MITIGATIONS)
-			
-			if(CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_CLANG})
-				
-				if(NOT CMAKEIT_COMPILER_CLANG_APPLE)
-				
-					target_compile_options(${TARGET_NAME} PRIVATE "-mretpoline")
-
-					if(CMAKEIT_COMPILER_SPECTRE_MITIGATIONS_ADVANCED)
-						target_compile_options(${TARGET_NAME} PRIVATE "-mspeculative-load-hardening")
-					endif()
-				
-				endif()
-
-			endif()
-
-			if((CMAKEIT_MODULE_TYPE STREQUAL ${CMAKEIT_MODULE_TYPE_LIBRARY}) AND (CMAKEIT_MODULE_SUBTYPE STREQUAL ${CMAKEIT_MODULE_SUBTYPE_SHARED}))
-				set(TARGET_LINKER_FLAGS "-Wl,-z,retpolineplt ${TARGET_LINKER_FLAGS}")
-			endif()
-			
-			if(CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_GCC})
-
-				if((CMAKEIT_TARGET_ARCHITECTURE STREQUAL ${CMAKEIT_TARGET_ARCHITECTURE_INTEL_X86}) OR (CMAKEIT_TARGET_ARCHITECTURE STREQUAL ${CMAKEIT_TARGET_ARCHITECTURE_INTEL_X64}))
-
-					target_compile_options(${TARGET_NAME} PRIVATE "-mindirect-branch=thunk")
-					target_compile_options(${TARGET_NAME} PRIVATE "-mindirect-branch-register")
-					target_compile_options(${TARGET_NAME} PRIVATE "-mfunction-return=thunk")
-
-				elseif((CMAKEIT_TARGET_ARCHITECTURE STREQUAL ${CMAKEIT_TARGET_ARCHITECTURE_INTEL_ARM64}))
-
-					target_compile_options(${TARGET_NAME} PRIVATE "-mtrack-speculation")
-
-				endif()
-
-			endif()
 
 		endif()
 
@@ -1099,6 +1057,30 @@ function(cmakeit_target_apply_build_properties IS_UNITTEST UNITTEST_NAME)
 			set(TARGET_LINKER_FLAGS "-ldl -lrt ${TARGET_LINKER_FLAGS}")
 		endif()
 		
+	endif()
+
+	if(NOT CMAKEIT_MODULE_NO_SPECTRE_MITIGATIONS)
+
+		if(CMAKEIT_COMPILER_SPECTRE_MITIGATION_COMPILER_FLAGS)
+
+			foreach(INTERNAL_CMAKEIT_COMPILER_SPECTRE_MITIGATION_COMPILER_FLAG ${CMAKEIT_COMPILER_SPECTRE_MITIGATION_COMPILER_FLAGS})
+				target_compile_options(${TARGET_NAME} PRIVATE "${INTERNAL_CMAKEIT_COMPILER_SPECTRE_MITIGATION_COMPILER_FLAG}")	
+			endforeach()
+			
+			unset(INTERNAL_CMAKEIT_COMPILER_SPECTRE_MITIGATION_COMPILER_FLAG)
+		
+		endif()
+
+		if(CMAKEIT_COMPILER_SPECTRE_MITIGATION_LINKER_FLAGS)
+
+			foreach(INTERNAL_CMAKEIT_COMPILER_SPECTRE_MITIGATION_LINKER_FLAG ${CMAKEIT_COMPILER_SPECTRE_MITIGATION_LINKER_FLAGS})
+				set(TARGET_LINKER_FLAGS "${INTERNAL_CMAKEIT_COMPILER_SPECTRE_MITIGATION_LINKER_FLAG} ${TARGET_LINKER_FLAGS}")
+			endforeach()
+		
+			unset(INTERNAL_CMAKEIT_COMPILER_SPECTRE_MITIGATION_LINKER_FLAG)
+
+		endif()
+
 	endif()
 
 	if(NOT (TARGET_LINKER_FLAGS STREQUAL ""))

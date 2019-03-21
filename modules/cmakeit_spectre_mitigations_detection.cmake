@@ -102,14 +102,127 @@ if((CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_GCC}) AND (NOT CYGWIN))
 
 endif()
 
-unset(CMAKEIT_COMPILER_SPECTRE_MITIGATION_COMPILER_FLAGS)
-unset(CMAKEIT_COMPILER_SPECTRE_MITIGATION_LINKER_FLAGS)
-
 if(NOT CMAKEIT_COMPILER_NO_SPECTRE_MITIGATIONS)
 
-    if(CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_CLANG})
-        check_cxx_compiler_flag("-mretpoline" INTENAL_SPECTRE_MITIGATION_RETPOLINE)
-        check_cxx_compiler_flag("-mspeculative-load-hardening" INTENAL_SPECTRE_MITIGATION_RETPOLINE)
+    set(INTERNAL_CMAKEIT_REQUIRED_QUIET ${CMAKE_REQUIRED_QUIET})
+    set(CMAKE_REQUIRED_QUIET ON)
+
+    unset(CMAKEIT_COMPILER_SPECTRE_MITIGATION_COMPILER_FLAGS)
+    unset(CMAKEIT_COMPILER_SPECTRE_MITIGATION_LINKER_FLAGS)
+
+    message(STATUS "Detecting if compiler support SPECTRE mitigations...")
+
+    if(CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_VISUAL_C})
+        list(APPEND CMAKEIT_COMPILER_SPECTRE_MITIGATION_COMPILER_FLAGS "/Qspectre")
     endif()
 
+    if(CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_CLANG})
+        
+        check_cxx_compiler_flag("-mspeculative-load-hardening" INTERNAL_SPECTRE_MITIGATION_SPECULATIVE_LOAD_HARDENING)
+
+        if(INTERNAL_SPECTRE_MITIGATION_SPECULATIVE_LOAD_HARDENING)
+
+            list(APPEND CMAKEIT_COMPILER_SPECTRE_MITIGATION_COMPILER_FLAGS "-mspeculative-load-hardening")
+
+            unset(INTERNAL_SPECTRE_MITIGATION_SPECULATIVE_LOAD_HARDENING)
+
+        else()
+
+            check_cxx_compiler_flag("-mretpoline" INTERNAL_SPECTRE_MITIGATION_RETPOLINE)
+
+            if(INTERNAL_SPECTRE_MITIGATION_RETPOLINE)
+
+                list(APPEND CMAKEIT_COMPILER_SPECTRE_MITIGATION_COMPILER_FLAGS "-mretpoline")
+
+                unset(INTERNAL_SPECTRE_MITIGATION_SPECULATIVE_LOAD_HARDENING)
+
+            endif()
+    
+        endif()
+    
+    endif()
+
+    if(CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_GCC})
+        
+        if((CMAKEIT_TARGET_ARCHITECTURE STREQUAL ${CMAKEIT_TARGET_ARCHITECTURE_INTEL_X86}) OR (CMAKEIT_TARGET_ARCHITECTURE STREQUAL ${CMAKEIT_TARGET_ARCHITECTURE_INTEL_X64}))
+
+            check_cxx_compiler_flag("-mindirect-branch=thunk" INTERNAL_SPECTRE_MITIGATION_INDIRECT_BRANCH)
+
+            if(INTERNAL_SPECTRE_MITIGATION_INDIRECT_BRANCH)
+
+                list(APPEND CMAKEIT_COMPILER_SPECTRE_MITIGATION_COMPILER_FLAGS "-mindirect-branch=thunk")
+
+                unset(INTERNAL_SPECTRE_MITIGATION_INDIRECT_BRANCH)
+
+            endif()
+
+            check_cxx_compiler_flag("-mindirect-branch-register" INTERNAL_SPECTRE_MITIGATION_INDIRECT_BRANCH_REGISTER)
+
+            if(INTERNAL_SPECTRE_MITIGATION_INDIRECT_BRANCH_REGISTER)
+
+                list(APPEND CMAKEIT_COMPILER_SPECTRE_MITIGATION_COMPILER_FLAGS "-mindirect-branch-register")
+
+                unset(INTERNAL_SPECTRE_MITIGATION_INDIRECT_BRANCH_REGISTER)
+
+            endif()
+
+            check_cxx_compiler_flag("-mfunction-return=thunk" INTERNAL_SPECTRE_MITIGATION_FUNCTION_RETURN)
+
+            if(INTERNAL_SPECTRE_MITIGATION_FUNCTION_RETURN)
+
+                list(APPEND CMAKEIT_COMPILER_SPECTRE_MITIGATION_COMPILER_FLAGS "-mfunction-return=thunk")
+
+                unset(INTERNAL_SPECTRE_MITIGATION_FUNCTION_RETURN)
+
+            endif()
+
+        elseif((CMAKEIT_TARGET_ARCHITECTURE STREQUAL ${CMAKEIT_TARGET_ARCHITECTURE_INTEL_ARM64}))
+
+            check_cxx_compiler_flag("-mtrack-speculation" INTERNAL_SPECTRE_MITIGATION_TRACK_SPECULATION)
+
+            if(INTERNAL_SPECTRE_MITIGATION_TRACK_SPECULATION)
+
+                list(APPEND CMAKEIT_COMPILER_SPECTRE_MITIGATION_COMPILER_FLAGS "-mtrack-speculation")
+
+                unset(INTERNAL_SPECTRE_MITIGATION_TRACK_SPECULATION)
+
+            endif()
+
+        endif()
+    
+    endif()
+
+    if(CMAKEIT_COMPILER_SPECTRE_MITIGATION_COMPILER_FLAGS)    
+        
+        message(STATUS "Detecting if compiler support SPECTRE mitigations... - done")
+
+        message(STATUS "Detecting if linker support SPECTRE mitigations...")
+
+        if((CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_CLANG}) OR (CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_GCC}))
+
+            check_cxx_compiler_flag("-shared -Wl,-z,retpolineplt" INTERNAL_SPECTRE_MITIGATION_RETPOLINE_PLT)
+
+            if(INTERNAL_SPECTRE_MITIGATION_RETPOLINE_PLT)
+
+                list(APPEND CMAKEIT_COMPILER_SPECTRE_MITIGATION_LINKER_FLAGS -shared -Wl,-z,retpolineplt)
+
+                unset(INTERNAL_SPECTRE_MITIGATION_RETPOLINE_PLT)
+
+            endif()
+        
+        endif()
+
+        if(CMAKEIT_COMPILER_SPECTRE_MITIGATION_COMPILER_FLAGS)    
+            message(STATUS "Detecting if linker support SPECTRE mitigations... - done")
+        else()
+            message(STATUS "Detecting if linker support SPECTRE mitigations... - NOTFOUND")
+        endif()
+        
+    else()
+        message(STATUS "Detecting if compiler support SPECTRE mitigations... - NOTFOUND")
+    endif()
+
+    set(CMAKE_REQUIRED_QUIET ${INTERNAL_CMAKEIT_REQUIRED_QUIET})
+    unset(INTERNAL_CMAKEIT_REQUIRED_QUIET)
+    
 endif()

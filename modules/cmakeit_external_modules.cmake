@@ -20,21 +20,12 @@
 #
 
 #
-# cmakeit_features.cmake - CMakeIt defaults for CMake policies
+# cmakeit_external_modules.cmake - external modules used by CMake
 #
 
-# Enable languages
-project(CMakeItFeatures)
-enable_language(C)
-enable_language(CXX)
-enable_language(ASM)
+# Check compiler flags
+include(CheckCCompilerFlag)
+include(CheckCXXCompilerFlag)
 
 # Enable PIE if supported
 include(CheckPIESupported)
-
-check_pie_supported()
-
-# Enable threading support
-set(THREADS_PREFER_PTHREAD_FLAG ON)
-
-find_package(Threads REQUIRED)
