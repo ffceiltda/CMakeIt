@@ -23,11 +23,6 @@
 # cmakeit_features.cmake - CMakeIt defaults for CMake policies
 #
 
-# Enable CMakeIt languages
-enable_language(C)
-enable_language(CXX)
-enable_language(ASM)
-
 # Enable PIE if supported
 include(CheckPIESupported)
 

@@ -1001,16 +1001,16 @@ function(cmakeit_target_apply_build_properties IS_UNITTEST UNITTEST_NAME)
 				
 					target_compile_options(${TARGET_NAME} PRIVATE "-mretpoline")
 
-					if((CMAKEIT_MODULE_TYPE STREQUAL ${CMAKEIT_MODULE_TYPE_LIBRARY}) AND (CMAKEIT_MODULE_SUBTYPE STREQUAL ${CMAKEIT_MODULE_SUBTYPE_SHARED}))
-						set(TARGET_LINKER_FLAGS "-Wl,-z,retpolineplt ${TARGET_LINKER_FLAGS}")
-					endif()
-
 					if(CMAKEIT_COMPILER_SPECTRE_MITIGATIONS_ADVANCED)
 						target_compile_options(${TARGET_NAME} PRIVATE "-mspeculative-load-hardening")
 					endif()
 				
 				endif()
 
+			endif()
+
+			if((CMAKEIT_MODULE_TYPE STREQUAL ${CMAKEIT_MODULE_TYPE_LIBRARY}) AND (CMAKEIT_MODULE_SUBTYPE STREQUAL ${CMAKEIT_MODULE_SUBTYPE_SHARED}))
+				set(TARGET_LINKER_FLAGS "-Wl,-z,retpolineplt ${TARGET_LINKER_FLAGS}")
 			endif()
 			
 			if(CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_GCC})
