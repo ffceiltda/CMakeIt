@@ -20,45 +20,19 @@
 #
 
 #
-# CMakeIt.cmake - main module of CMakeIt build system
+# cmakeit_policies.cmake - CMakeIt defaults for CMake policies
 #
 
-# We requires CMake 3.14 to things work correcly
-cmake_minimum_required(VERSION 3.14.0)
+# Enable AppleCLang policy
+if(POLICY CMP0025)
+    
+    cmake_policy(SET CMP0025 NEW)
+    
+    set(CMAKE_POLICY_WARNING_CMP0025 ON)
 
-#
-# CMAKEIT_ROOT - point to the root of CMakeIt module files. If not set, then 
-# defaults to ${CMAKE_SOURCE_DIR}/CMakeIt
-#
-# Example: set(CMAKEIT_ROOT ${CMAKE_SOURCE_DIR}/CMakeIt)
-if(NOT CMAKEIT_ROOT)
-	set(CMAKEIT_ROOT ${CMAKE_CURRENT_LIST_DIR})
 endif()
 
-# Add CMakeIt module path to CMake CMAKE_MODULE_PATH environment variable
-if(CMAKEIT_ROOT)
-	list(APPEND CMAKE_MODULE_PATH ${CMAKEIT_ROOT})
+# Enable Position Independent Executables (ASLR) policy
+if(POLICY CMP0083)
+    cmake_policy(SET CMP0083 NEW)
 endif()
-
-# Configure variables to bootstrap CMakeIt
-include(cmakeit_version)
-include(cmakeit_variables)
-include(cmakeit_constants)
-
-# Enable CMake policies
-include(cmakeit_policies)
-
-# Basic CMake features needed
-include(cmakeit_features)
-
-# Shows banner of CMake when called (and not configured to hide)
-include(cmakeit_banner)
-
-# Include custom CMakeIt functions
-include(cmakeit_functions)
-
-# Perform detection of toolset, compiler and target that will be used for build
-include(cmakeit_detection)
-
-# Define CMAKEIT_INCLUDED for next phase of build scripts
-set(CMAKEIT_INCLUDED ON)

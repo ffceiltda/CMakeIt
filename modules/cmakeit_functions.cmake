@@ -898,6 +898,10 @@ function(cmakeit_target_apply_build_properties IS_UNITTEST UNITTEST_NAME)
 		
 	endif()
 
+	if(Threads_FOUND)
+		target_link_libraries(${TARGET_NAME} Threads::Threads)
+	endif()
+
 	get_target_property(TARGET_LINKER_FLAGS ${TARGET_NAME} LINK_FLAGS)
 	get_target_property(TARGET_STATIC_LIBRARY_LINKER_FLAGS ${TARGET_NAME} STATIC_LIBRARY_FLAGS)
 
@@ -993,10 +997,18 @@ function(cmakeit_target_apply_build_properties IS_UNITTEST UNITTEST_NAME)
 			
 			if(CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_CLANG})
 				
-				target_compile_options(${TARGET_NAME} PRIVATE "-mretpoline")
+				if(NOT CMAKEIT_COMPILER_CLANG_APPLE)
+				
+					target_compile_options(${TARGET_NAME} PRIVATE "-mretpoline")
 
-				if(CMAKEIT_COMPILER_SPECTRE_MITIGATIONS_ADVANCED)
-					target_compile_options(${TARGET_NAME} PRIVATE "-mspeculative-load-hardening")
+					if((CMAKEIT_MODULE_TYPE STREQUAL ${CMAKEIT_MODULE_TYPE_LIBRARY}) AND (CMAKEIT_MODULE_SUBTYPE STREQUAL ${CMAKEIT_MODULE_SUBTYPE_SHARED}))
+						set(TARGET_LINKER_FLAGS "-Wl,-z,retpolineplt ${TARGET_LINKER_FLAGS}")
+					endif()
+
+					if(CMAKEIT_COMPILER_SPECTRE_MITIGATIONS_ADVANCED)
+						target_compile_options(${TARGET_NAME} PRIVATE "-mspeculative-load-hardening")
+					endif()
+				
 				endif()
 
 			endif()
@@ -1024,14 +1036,6 @@ function(cmakeit_target_apply_build_properties IS_UNITTEST UNITTEST_NAME)
 			target_compile_options(${TARGET_NAME} PRIVATE "-fstack-protector-strong")
 
 			set(TARGET_LINKER_FLAGS "-fstack-protector-strong ${TARGET_LINKER_FLAGS}")
-
-			if(CMAKEIT_TARGET_PLATFORM_VARIANT STREQUAL ${CMAKEIT_TARGET_PLATFORM_VARIANT_UNIX_LINUX})
-			
-				target_compile_options(${TARGET_NAME} PRIVATE "-pthread")
-				
-				set(TARGET_LINKER_FLAGS "-pthread -lpthread -ldl -lrt ${TARGET_LINKER_FLAGS}")
-				
-			endif()
 
 		endif()
 
@@ -1089,6 +1093,10 @@ function(cmakeit_target_apply_build_properties IS_UNITTEST UNITTEST_NAME)
 		
 		if((CMAKEIT_MODULE_TYPE STREQUAL ${CMAKEIT_MODULE_TYPE_LIBRARY}) AND (CMAKEIT_MODULE_SUBTYPE STREQUAL ${CMAKEIT_MODULE_SUBTYPE_SHARED}))
 			set(TARGET_LINKER_FLAGS "-shared ${TARGET_LINKER_FLAGS}")
+		endif()
+
+		if(CMAKEIT_TARGET_PLATFORM_VARIANT STREQUAL ${CMAKEIT_TARGET_PLATFORM_VARIANT_UNIX_LINUX})
+			set(TARGET_LINKER_FLAGS "-ldl -lrt ${TARGET_LINKER_FLAGS}")
 		endif()
 		
 	endif()
