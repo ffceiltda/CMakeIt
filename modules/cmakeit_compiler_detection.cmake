@@ -23,21 +23,8 @@
 # cmakeit_compiler_detection.cmake - detect toolset used to build project
 #
 
-if((NOT CMAKEIT_HIDE_BANNER) AND (NOT CMAKEIT_COMPILER))
+if(NOT CMAKEIT_HIDE_BANNER)
 	message(STATUS "Detecting compiler used for building...")
-endif()
-
-if(CMAKEIT_COMPILER)
-
- unset(CMAKEIT_COMPILER)
- 
- message(STATUS "CMAKE_C_COMPILER ${CMAKE_C_COMPILER}")
- message(STATUS "CMAKE_C_COMPILER_ID ${CMAKE_C_COMPILER_ID}")
- message(STATUS "CMAKE_C_COMPILER_VERSION ${CMAKE_C_COMPILER_VERSION}")
- message(STATUS "CMAKE_CXX_COMPILER ${CMAKE_CXX_COMPILER}")
- message(STATUS "CMAKE_CXX_COMPILER_ID ${CMAKE_CXX_COMPILER_ID}")
- message(STATUS "CMAKE_CXX_COMPILER_VERSION ${CMAKE_CXX_COMPILER_VERSION}")
-
 endif()
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")

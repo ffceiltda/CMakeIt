@@ -20,10 +20,23 @@
 #
 
 #
-# cmakeit_features.cmake - CMakeIt defaults for CMake policies
+# cmakeit_pch_feature.cmake - CMakeIt pre-compiled header support detection for target
+#   compiler / architecture / platform
 #
 
-include(cmakeit_pch_feature)
-include(cmakeit_pie_feature)
-include(cmakeit_thread_feature)
-include(cmakeit_spectre_mitigations_feature)
+# MinGW / Cygwin binutils/GCC doesn't play well with PCH...
+if(MINGW OR CYGWIN)
+	set(CMAKEIT_COMPILER_NO_PCH ON)
+endif()
+
+# If compiler is unrecognized, skip PCH support
+if(NOT CMAKEIT_COMPILER_PCH_SUFFIX)
+	set(CMAKEIT_COMPILER_NO_PCH ON)
+else()
+	unset(CMAKEIT_COMPILER_NO_PCH)
+endif()
+
+# Unset CMAKEIT_COMPILER_PCH_SUFFIX if was set before but CMAKEIT_COMPILER_NO_PCH was detected
+if(CMAKEIT_COMPILER_NO_PCH)
+	unset(CMAKEIT_COMPILER_PCH_SUFFIX)
+endif()

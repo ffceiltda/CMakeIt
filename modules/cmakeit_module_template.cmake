@@ -337,9 +337,6 @@ else()
 	# Set CMAKEIT_PROJECT_INCLUDED variable
 	set(CMAKEIT_MODULE_INCLUDED ON)
 
-	# Re-check compiler (AppleClang 'bug' on CMake)
-	include(cmakeit_compiler_detection)
-
 	# Scan for source files of the project
 	include(cmakeit_module_subtree_scanner)
 

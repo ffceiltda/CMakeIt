@@ -20,23 +20,9 @@
 #
 
 #
-# cmakeit_pch_detection.cmake - CMakeIt pre-compiled header support detection for target
-#   compiler / architecture / platform
+# cmakeit_thread_feature.cmake - check if threads are supported
 #
 
-# MinGW / Cygwin binutils/GCC doesn't play well with PCH...
-if(MINGW OR CYGWIN)
-	set(CMAKEIT_COMPILER_NO_PCH ON)
-endif()
+set(THREADS_PREFER_PTHREAD_FLAG ON)
 
-# If compiler is unrecognized, skip PCH support
-if(NOT CMAKEIT_COMPILER_PCH_SUFFIX)
-	set(CMAKEIT_COMPILER_NO_PCH ON)
-else()
-	unset(CMAKEIT_COMPILER_NO_PCH)
-endif()
-
-# Unset CMAKEIT_COMPILER_PCH_SUFFIX if was set before but CMAKEIT_COMPILER_NO_PCH was detected
-if(CMAKEIT_COMPILER_NO_PCH)
-	unset(CMAKEIT_COMPILER_PCH_SUFFIX)
-endif()
+find_package(Threads REQUIRED)

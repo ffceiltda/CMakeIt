@@ -20,10 +20,9 @@
 #
 
 #
-# cmakeit_features.cmake - CMakeIt defaults for CMake policies
+# cmakeit_pie_feature.cmake - check if PIE (ASLR) executables are supported
 #
 
-include(cmakeit_pch_feature)
-include(cmakeit_pie_feature)
-include(cmakeit_thread_feature)
-include(cmakeit_spectre_mitigations_feature)
+include(CheckPIESupported)
+
+check_pie_supported()
