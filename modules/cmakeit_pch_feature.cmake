@@ -20,25 +20,23 @@
 #
 
 #
-# cmakeit_version.cmake - CMakeIt build system version
+# cmakeit_pch_feature.cmake - CMakeIt pre-compiled header support detection for target
+#   compiler / architecture / platform
 #
 
-#
-# CMAKEIT_VERSION_MAJOR - the major version number of CMakeIt build system
-#
-set(CMAKEIT_VERSION_MAJOR 0)
+# MinGW / Cygwin binutils/GCC doesn't play well with PCH...
+if(MINGW OR CYGWIN)
+	set(CMAKEIT_COMPILER_NO_PCH ON)
+endif()
 
-#
-# CMAKEIT_VERSION_MINOR - the minor version number of CMakeIt build system
-#
-set(CMAKEIT_VERSION_MINOR 0)
+# If compiler is unrecognized, skip PCH support
+if(NOT CMAKEIT_COMPILER_PCH_SUFFIX)
+	set(CMAKEIT_COMPILER_NO_PCH ON)
+else()
+	unset(CMAKEIT_COMPILER_NO_PCH)
+endif()
 
-#
-# CMAKEIT_REVISION_NUMBER - the revision_number of CMakeIt build system
-#
-set(CMAKEIT_REVISION_NUMBER 3)
-
-#
-# CMAKEIT_VERSION - the full version string of CMakeIt build system
-#
-set(CMAKEIT_VERSION "${CMAKEIT_VERSION_MAJOR}.${CMAKEIT_VERSION_MINOR};${CMAKEIT_REVISION_NUMBER}")
+# Unset CMAKEIT_COMPILER_PCH_SUFFIX if was set before but CMAKEIT_COMPILER_NO_PCH was detected
+if(CMAKEIT_COMPILER_NO_PCH)
+	unset(CMAKEIT_COMPILER_PCH_SUFFIX)
+endif()

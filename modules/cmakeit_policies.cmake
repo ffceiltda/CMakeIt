@@ -20,25 +20,19 @@
 #
 
 #
-# cmakeit_version.cmake - CMakeIt build system version
+# cmakeit_policies.cmake - CMakeIt defaults for CMake policies
 #
 
-#
-# CMAKEIT_VERSION_MAJOR - the major version number of CMakeIt build system
-#
-set(CMAKEIT_VERSION_MAJOR 0)
+# Enable AppleCLang policy
+if(POLICY CMP0025)
+    
+    cmake_policy(SET CMP0025 NEW)
+    
+    set(CMAKE_POLICY_WARNING_CMP0025 ON)
 
-#
-# CMAKEIT_VERSION_MINOR - the minor version number of CMakeIt build system
-#
-set(CMAKEIT_VERSION_MINOR 0)
+endif()
 
-#
-# CMAKEIT_REVISION_NUMBER - the revision_number of CMakeIt build system
-#
-set(CMAKEIT_REVISION_NUMBER 3)
-
-#
-# CMAKEIT_VERSION - the full version string of CMakeIt build system
-#
-set(CMAKEIT_VERSION "${CMAKEIT_VERSION_MAJOR}.${CMAKEIT_VERSION_MINOR};${CMAKEIT_REVISION_NUMBER}")
+# Enable Position Independent Executables (ASLR) policy
+if(POLICY CMP0083)
+    cmake_policy(SET CMP0083 NEW)
+endif()

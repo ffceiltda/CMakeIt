@@ -28,25 +28,19 @@ include(cmakeit_compiler_detection)
 include(cmakeit_toolset_detection)
 include(cmakeit_target_architecture_detection)
 include(cmakeit_build_type_detection)
-include(cmakeit_pch_detection)
 
 if(NOT CMAKEIT_HIDE_BANNER)
-
-	if(NOT CMAKEIT_COMPILER_NO_PCH)
-		set(INTERNAL_CMAKEIT_PCH_SUPPORT " (with pre-compiled headers support)")
-	endif()
 
 	string(SUBSTRING ${CMAKEIT_COMPILER_C_STANDARD} 3 3 INTERNAL_COMPILER_C_STANDARD)
 	string(SUBSTRING ${CMAKEIT_COMPILER_CXX_STANDARD} 3 5 INTERNAL_COMPILER_CXX_STANDARD)
 	
 	message(STATUS "")
-	message(STATUS "Using ${CMAKEIT_TOOLSET} toolset [using ${CMAKEIT_COMPILER} compiler, standard support is ${INTERNAL_COMPILER_CXX_STANDARD}, ${INTERNAL_COMPILER_C_STANDARD}${INTERNAL_CMAKEIT_PCH_SUPPORT}]")
+	message(STATUS "Using ${CMAKEIT_TOOLSET} toolset [using ${CMAKEIT_COMPILER} compiler, standard support is ${INTERNAL_COMPILER_CXX_STANDARD}, ${INTERNAL_COMPILER_C_STANDARD}]")
 	message(STATUS "Targetting ${CMAKEIT_TARGET_PLATFORM} plataform [${CMAKEIT_TARGET_PLATFORM_VARIANT} variant on ${CMAKEIT_TARGET_ARCHITECTURE} architecture]")
 	message(STATUS "Building ${CMAKEIT_BUILD_TYPE} configuration")
 	message(STATUS "")
 
 	unset(INTERNAL_COMPILER_C_STANDARD)
 	unset(INTERNAL_COMPILER_CXX_STANDARD)
-	unset(INTERNAL_CMAKEIT_PCH_SUPPORT)
 
 endif()

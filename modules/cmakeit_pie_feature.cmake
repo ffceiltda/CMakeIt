@@ -20,25 +20,9 @@
 #
 
 #
-# cmakeit_version.cmake - CMakeIt build system version
+# cmakeit_pie_feature.cmake - check if PIE (ASLR) executables are supported
 #
 
-#
-# CMAKEIT_VERSION_MAJOR - the major version number of CMakeIt build system
-#
-set(CMAKEIT_VERSION_MAJOR 0)
+include(CheckPIESupported)
 
-#
-# CMAKEIT_VERSION_MINOR - the minor version number of CMakeIt build system
-#
-set(CMAKEIT_VERSION_MINOR 0)
-
-#
-# CMAKEIT_REVISION_NUMBER - the revision_number of CMakeIt build system
-#
-set(CMAKEIT_REVISION_NUMBER 3)
-
-#
-# CMAKEIT_VERSION - the full version string of CMakeIt build system
-#
-set(CMAKEIT_VERSION "${CMAKEIT_VERSION_MAJOR}.${CMAKEIT_VERSION_MINOR};${CMAKEIT_REVISION_NUMBER}")
+check_pie_supported()

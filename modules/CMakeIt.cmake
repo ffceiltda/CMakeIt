@@ -27,10 +27,20 @@
 cmake_minimum_required(VERSION 3.14.0)
 
 #
+# CMAKEIT_INCLUDED - set if CMakeIt was previously included, act as include guard
+#
+if(CMAKEIT_INCLUDED)
+	return()
+endif()
+
+set(CMAKEIT_INCLUDED ON)
+
+#
 # CMAKEIT_ROOT - point to the root of CMakeIt module files. If not set, then 
 # defaults to ${CMAKE_SOURCE_DIR}/CMakeIt
 #
 # Example: set(CMAKEIT_ROOT ${CMAKE_SOURCE_DIR}/CMakeIt)
+#
 if(NOT CMAKEIT_ROOT)
 	set(CMAKEIT_ROOT ${CMAKE_CURRENT_LIST_DIR})
 endif()
@@ -40,19 +50,28 @@ if(CMAKEIT_ROOT)
 	list(APPEND CMAKE_MODULE_PATH ${CMAKEIT_ROOT})
 endif()
 
+# Shows banner of CMake when called (and not configured to hide)
+include(cmakeit_banner)
+
 # Configure variables to bootstrap CMakeIt
 include(cmakeit_version)
 include(cmakeit_variables)
 include(cmakeit_constants)
 
-# Shows banner of CMake when called (and not configured to hide)
-include(cmakeit_banner)
+# Include external CMakeIt modules used
+include(cmakeit_external_modules)
+
+# Include custom CMakeIt functions
+include(cmakeit_functions)
+
+# Enable CMake policies
+include(cmakeit_policies)
 
 # Perform detection of toolset, compiler and target that will be used for build
 include(cmakeit_detection)
 
-# Include custom CMakeIt functions
-include(cmakeit_functions)
+# Basic CMake features needed
+include(cmakeit_features)
 
 # Define CMAKEIT_INCLUDED for next phase of build scripts
 set(CMAKEIT_INCLUDED ON)

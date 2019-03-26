@@ -20,25 +20,9 @@
 #
 
 #
-# cmakeit_version.cmake - CMakeIt build system version
+# cmakeit_thread_feature.cmake - check if threads are supported
 #
 
-#
-# CMAKEIT_VERSION_MAJOR - the major version number of CMakeIt build system
-#
-set(CMAKEIT_VERSION_MAJOR 0)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
 
-#
-# CMAKEIT_VERSION_MINOR - the minor version number of CMakeIt build system
-#
-set(CMAKEIT_VERSION_MINOR 0)
-
-#
-# CMAKEIT_REVISION_NUMBER - the revision_number of CMakeIt build system
-#
-set(CMAKEIT_REVISION_NUMBER 3)
-
-#
-# CMAKEIT_VERSION - the full version string of CMakeIt build system
-#
-set(CMAKEIT_VERSION "${CMAKEIT_VERSION_MAJOR}.${CMAKEIT_VERSION_MINOR};${CMAKEIT_REVISION_NUMBER}")
+find_package(Threads REQUIRED)
