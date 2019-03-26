@@ -20,17 +20,8 @@
 #
 
 #
-# cmakeit_external_modules.cmake - external modules used by CMake
+# check_ipo_supported.cmake - check if link-time code generation is supported
 #
+unset(CMAKEIT_SUPPORT_IPO)
 
-# Check compiler flags
-include(CheckCCompilerFlag)
-include(CheckCXXCompilerFlag)
-
-# Enable IPO if supported
-include(CheckIPOSupported)
-
-# Enable PIE if supported
-if(NOT (CMAKE_VERSION VERSION_LESS 3.14))
-	include(CheckPIESupported)
-endif()
+check_ipo_supported(RESULT CMAKEIT_SUPPORT_IPO LANGUAGES C CXX ASM)

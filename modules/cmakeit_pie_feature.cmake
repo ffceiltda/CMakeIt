@@ -23,6 +23,6 @@
 # cmakeit_pie_feature.cmake - check if PIE (ASLR) executables are supported
 #
 
-include(CheckPIESupported)
-
-check_pie_supported()
+if(NOT (CMAKE_VERSION VERSION_LESS 3.14))
+	check_pie_supported()
+endif()
