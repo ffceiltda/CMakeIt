@@ -340,4 +340,7 @@ else()
 	# Scan for source files of the project
 	include(cmakeit_module_subtree_scanner NO_POLICY_SCOPE)
 
+	# Detect PCH support
+	include(cmakeit_module_pch_detection NO_POLICY_SCOPE)
+
 endif()
