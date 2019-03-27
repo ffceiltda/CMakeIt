@@ -20,15 +20,39 @@
 #
 
 #
-# cmakeit_features.cmake - CMakeIt defaults for CMake policies
+# check_ipo_build_supported.cmake - check if link-time code generation is supported
 #
+unset(CMAKEIT_SUPPORT_IPO)
+unset(CMAKEIT_SUPPORT_IPO_MANUAL)
 
-include(cmakeit_pch_feature)
-include(cmakeit_pie_feature)
-include(cmakeit_ipo_feature)
-include(cmakeit_thread_feature)
-include(cmakeit_spectre_mitigations_feature)
+if(NOT INTERNAL_CMAKEIT_REQUIRED_QUIET)
 
-if(NOT CMAKEIT_HIDE_BANNER)
-    message(STATUS "")
+	if(NOT CMAKEIT_HIDE_BANNER)
+		message(STATUS "Check if toolset support inter-procedural optimization...")
+	endif()
+
+endif()
+
+check_ipo_supported(RESULT CMAKEIT_SUPPORT_IPO LANGUAGES C CXX ASM)
+
+if(NOT CMAKEIT_SUPPORT_IPO)
+
+	if(CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_VISUAL_C})
+
+		if(NOT (MSVC_VER LESS 1400))
+			set(CMAKEIT_SUPPORT_IPO_MANUAL ON)
+		endif()
+
+	endif()
+
+endif()
+
+if(NOT INTERNAL_CMAKEIT_REQUIRED_QUIET)
+
+	if((NOT CMAKEIT_SUPPORT_IPO) AND (NOT CMAKEIT_SUPPORT_IPO_MANUAL))
+		message(STATUS "Check if toolset support inter-procedural optimization... - done")
+	else()
+		message(STATUS "Check if toolset support inter-procedural optimization... - NOTFOUND")
+	endif()
+
 endif()

@@ -23,6 +23,10 @@
 # cmakeit_external_modules.cmake - external modules used by CMake
 #
 
+if(NOT CMAKEIT_HIDE_BANNER)
+	message(STATUS "Loading CMake modules...")
+endif()
+
 # Check compiler flags
 include(CheckCCompilerFlag)
 include(CheckCXXCompilerFlag)

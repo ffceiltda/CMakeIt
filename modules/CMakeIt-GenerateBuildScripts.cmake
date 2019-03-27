@@ -30,10 +30,10 @@ if(NOT CMAKEIT_MODULE_INCLUDED)
 endif()
 
 # Detect PCH support
-include(cmakeit_module_pch_detection)
+include(cmakeit_module_pch_detection NO_POLICY_SCOPE)
 
 # Add module target
-include(cmakeit_module_target)
+include(cmakeit_module_target NO_POLICY_SCOPE)
 
 # Add unit test targets
 # include(cmakeit_module_unit_tests)

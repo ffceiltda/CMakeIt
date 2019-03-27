@@ -23,7 +23,7 @@
 # CMakeIt-ProjectRoot.cmake - CMakeIt script to scan the project directory tree for CMakeLists.txt projects
 #
 if(NOT CMAKEIT_ROOT)
-	include(${CMAKE_CURRENT_LIST_DIR}/CMakeIt.cmake)
+	include(${CMAKE_CURRENT_LIST_DIR}/CMakeIt.cmake NO_POLICY_SCOPE)
 endif()
 
 set(CMAKEIT_PROJECT_MODULE_COUNT 0)

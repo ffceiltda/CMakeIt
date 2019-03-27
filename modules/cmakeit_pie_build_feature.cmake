@@ -20,21 +20,33 @@
 #
 
 #
-# check_ipo_supported.cmake - check if link-time code generation is supported
+# cmakeit_pie_build_feature.cmake - check if PIE (ASLR) executables are supported
 #
-unset(CMAKEIT_SUPPORT_IPO)
-unset(CMAKEIT_SUPPORT_IPO_MANUAL)
 
-check_ipo_supported(RESULT CMAKEIT_SUPPORT_IPO LANGUAGES C CXX ASM)
+if(NOT (CMAKE_VERSION VERSION_LESS 3.14))
 
-if(NOT CMAKEIT_SUPPORT_IPO)
+	if(NOT INTERNAL_CMAKEIT_REQUIRED_QUIET)
 
-	if(CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_VISUAL_C})
-
-		if(NOT (MSVC_VER LESS 1400))
-			set(CMAKEIT_SUPPORT_IPO_MANUAL ON)
+		if(NOT CMAKEIT_HIDE_BANNER)
+			message(STATUS "Check if compiler support ASLR...")
 		endif()
 
 	endif()
 
+	unset(INTERNAL_CMAKEIT_SUPPORT_PIE)
+
+	check_pie_supported(OUTPUT_VARIABLE INTERNAL_CMAKEIT_SUPPORT_PIE LANGUAGES C CXX)
+
+	if(NOT INTERNAL_CMAKEIT_REQUIRED_QUIET)
+
+		if(INTERNAL_CMAKEIT_SUPPORT_PIE)    
+			message(STATUS "Check if compiler support ASLR... - done")
+		else()
+			message(STATUS "Check if compiler support ASLR... - NOTFOUND")
+		endif()
+
+	endif()
+
+	unset(INTERNAL_CMAKEIT_SUPPORT_PIE)
+	
 endif()

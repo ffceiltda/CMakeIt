@@ -20,7 +20,7 @@
 #
 
 #
-# cmakeit_thread_feature.cmake - check if threads are supported
+# cmakeit_thread_build_feature.cmake - check if threads are supported
 #
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)

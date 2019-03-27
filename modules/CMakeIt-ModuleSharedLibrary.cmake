@@ -25,4 +25,4 @@
 
 set(CMAKEIT_MODULE_SUBTYPE ${CMAKEIT_MODULE_SUBTYPE_SHARED})
 
-include(cmakeit_library_module_template)
+include(cmakeit_library_module_template NO_POLICY_SCOPE)
