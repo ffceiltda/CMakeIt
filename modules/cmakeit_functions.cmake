@@ -932,6 +932,7 @@ function(cmakeit_target_apply_build_properties IS_UNITTEST UNITTEST_NAME)
 			target_compile_options(${TARGET_NAME} PRIVATE "/Oy-")
 		endif()
 
+
 		if(CMAKEIT_BUILD_TYPE STREQUAL ${CMAKEIT_BUILD_TYPE_DEBUG})
 		
 			target_compile_options(${TARGET_NAME} PRIVATE "/RTC1")
@@ -948,18 +949,20 @@ function(cmakeit_target_apply_build_properties IS_UNITTEST UNITTEST_NAME)
 		
 			target_compile_options(${TARGET_NAME} PRIVATE "/Gm-")
 			target_compile_options(${TARGET_NAME} PRIVATE "/Oi")
-			target_compile_options(${TARGET_NAME} PRIVATE "/GL")
+
+			if(CMAKEIT_SUPPORT_IPO_MANUAL)
+				target_compile_options(${TARGET_NAME} PRIVATE "/GL")
+			endif()
 
 			set(TARGET_LINKER_FLAGS "/OPT:REF /OPT:ICF ${TARGET_LINKER_FLAGS}")
 
 			get_target_property(TARGET_MODULE_PCH_NEED_PIC ${TARGET_NAME} POSITION_INDEPENDENT_CODE)
-			get_target_property(TARGET_MODULE_PCH_NEED_LTO ${TARGET_NAME} INTERPROCEDURAL_OPTIMIZATION)
-	
+
 			if(TARGET_MODULE_PCH_NEED_PIC)
 				target_compile_options(${TARGET_NAME} PRIVATE "/Gy")
 			endif()
 
-			if(TARGET_MODULE_PCH_NEED_LTO)
+			if(CMAKEIT_SUPPORT_IPO_MANUAL)
 			
 				set(TARGET_STATIC_LIBRARY_LINKER_FLAGS "/LTCG ${TARGET_STATIC_LIBRARY_LINKER_FLAGS}")
 				set(TARGET_LINKER_FLAGS "/LTCG ${TARGET_LINKER_FLAGS}")

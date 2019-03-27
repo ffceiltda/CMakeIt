@@ -23,5 +23,18 @@
 # check_ipo_supported.cmake - check if link-time code generation is supported
 #
 unset(CMAKEIT_SUPPORT_IPO)
+unset(CMAKEIT_SUPPORT_IPO_MANUAL)
 
 check_ipo_supported(RESULT CMAKEIT_SUPPORT_IPO LANGUAGES C CXX ASM)
+
+if(NOT CMAKEIT_SUPPORT_IPO)
+
+	if(CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_VISUAL_C})
+
+		if(NOT (MSVC_VER LESS 1400))
+			set(CMAKEIT_SUPPORT_IPO_MANUAL ON)
+		endif()
+
+	endif()
+
+endif()

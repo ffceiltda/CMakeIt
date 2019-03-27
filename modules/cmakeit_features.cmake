@@ -25,6 +25,7 @@
 
 include(cmakeit_pch_feature)
 include(cmakeit_pie_feature)
+include(cmakeit_ipo_feature)
 include(cmakeit_thread_feature)
 include(cmakeit_spectre_mitigations_feature)
 
