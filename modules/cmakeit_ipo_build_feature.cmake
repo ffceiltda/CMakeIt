@@ -36,10 +36,10 @@ endif()
 check_ipo_supported(RESULT CMAKEIT_SUPPORT_IPO LANGUAGES C CXX ASM)
 
 if(NOT CMAKEIT_SUPPORT_IPO)
-
+	
 	if(CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_VISUAL_C})
 
-		if(NOT (MSVC_VER LESS 1400))
+		if(NOT (MSVC_VERSION LESS 1400))
 			set(CMAKEIT_SUPPORT_IPO_MANUAL ON)
 		endif()
 
@@ -50,9 +50,9 @@ endif()
 if(NOT INTERNAL_CMAKEIT_REQUIRED_QUIET)
 
 	if((NOT CMAKEIT_SUPPORT_IPO) AND (NOT CMAKEIT_SUPPORT_IPO_MANUAL))
-		message(STATUS "Check if toolset support inter-procedural optimization... - done")
-	else()
 		message(STATUS "Check if toolset support inter-procedural optimization... - NOTFOUND")
+	else()
+		message(STATUS "Check if toolset support inter-procedural optimization... - done")
 	endif()
 
 endif()

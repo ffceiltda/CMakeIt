@@ -338,6 +338,6 @@ else()
 	set(CMAKEIT_MODULE_INCLUDED ON)
 
 	# Scan for source files of the project
-	include(cmakeit_module_subtree_scanner)
+	include(cmakeit_module_subtree_scanner NO_POLICY_SCOPE)
 
 endif()

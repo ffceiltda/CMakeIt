@@ -1,4 +1,4 @@
-﻿#
+#
 # CMakeIt - a collection of CMake modules to build programs from 'Visual Studio'-like 
 # projects, and well-structure project layouts (public and private include folders,
 # source folders), using CMake build system. Also features pre compiled headers

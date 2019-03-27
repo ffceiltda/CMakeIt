@@ -20,7 +20,7 @@
 #
 
 #
-# cmakeit_module_pch_support.cmake - CMakeIt support for pre-compiled header files
+# cmakeit_module_pch_detection.cmake - CMakeIt support for pre-compiled header files
 #
 
 # Check if we should ignore pre-compiled headers generation
