@@ -35,11 +35,11 @@ if(NOT (CMAKE_VERSION VERSION_LESS 3.14))
 
 	unset(INTERNAL_CMAKEIT_SUPPORT_PIE)
 
-	check_pie_supported(OUTPUT_VARIABLE INTERNAL_CMAKEIT_SUPPORT_PIE LANGUAGES C CXX)
+	check_pie_supported(LANGUAGES CXX)
 
 	if(NOT INTERNAL_CMAKEIT_REQUIRED_QUIET)
 
-		if(INTERNAL_CMAKEIT_SUPPORT_PIE)    
+		if(CMAKE_CXX_LINK_PIE_SUPPORTED)    
 			message(STATUS "Check if compiler support ASLR... - done")
 		else()
 			message(STATUS "Check if compiler support ASLR... - NOTFOUND")
