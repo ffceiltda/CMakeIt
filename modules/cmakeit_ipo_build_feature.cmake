@@ -20,9 +20,39 @@
 #
 
 #
-# cmakeit_thread_feature.cmake - check if threads are supported
+# check_ipo_build_supported.cmake - check if link-time code generation is supported
 #
+unset(CMAKEIT_SUPPORT_IPO)
+unset(CMAKEIT_SUPPORT_IPO_MANUAL)
 
-set(THREADS_PREFER_PTHREAD_FLAG ON)
+if(NOT INTERNAL_CMAKEIT_REQUIRED_QUIET)
 
-find_package(Threads REQUIRED)
+	if(NOT CMAKEIT_HIDE_BANNER)
+		message(STATUS "Check if toolset support inter-procedural optimization...")
+	endif()
+
+endif()
+
+check_ipo_supported(RESULT CMAKEIT_SUPPORT_IPO LANGUAGES CXX)
+
+if(NOT CMAKEIT_SUPPORT_IPO)
+	
+	if(CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_VISUAL_C})
+
+		if(NOT (MSVC_VERSION LESS 1400))
+			set(CMAKEIT_SUPPORT_IPO_MANUAL ON)
+		endif()
+
+	endif()
+
+endif()
+
+if(NOT INTERNAL_CMAKEIT_REQUIRED_QUIET)
+
+	if((NOT CMAKEIT_SUPPORT_IPO) AND (NOT CMAKEIT_SUPPORT_IPO_MANUAL))
+		message(STATUS "Check if toolset support inter-procedural optimization... - NOTFOUND")
+	else()
+		message(STATUS "Check if toolset support inter-procedural optimization... - done")
+	endif()
+
+endif()

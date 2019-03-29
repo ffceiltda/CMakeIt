@@ -23,9 +23,18 @@
 # cmakeit_external_modules.cmake - external modules used by CMake
 #
 
+if(NOT CMAKEIT_HIDE_BANNER)
+	message(STATUS "Loading CMake modules...")
+endif()
+
 # Check compiler flags
 include(CheckCCompilerFlag)
 include(CheckCXXCompilerFlag)
 
+# Enable IPO if supported
+include(CheckIPOSupported)
+
 # Enable PIE if supported
-include(CheckPIESupported)
+if(NOT (CMAKE_VERSION VERSION_LESS 3.14))
+	include(CheckPIESupported)
+endif()

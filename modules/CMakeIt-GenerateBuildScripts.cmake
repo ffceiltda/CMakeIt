@@ -29,11 +29,8 @@ if(NOT CMAKEIT_MODULE_INCLUDED)
 	message(FATAL_ERROR "No CMakeIt-Module was not included before including this CMakeIt module")
 endif()
 
-# Detect PCH support
-include(cmakeit_module_pch_detection)
-
 # Add module target
-include(cmakeit_module_target)
+include(cmakeit_module_target NO_POLICY_SCOPE)
 
 # Add unit test targets
-# include(cmakeit_module_unit_tests)
+# include(cmakeit_module_unit_tests NO_POLICY_SCOPE)

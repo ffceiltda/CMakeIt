@@ -23,6 +23,10 @@
 # cmakeit_policies.cmake - CMakeIt defaults for CMake policies
 #
 
+if(NOT CMAKEIT_HIDE_BANNER)
+    message(STATUS "Configuring CMake policies...")
+endif()
+
 # Enable AppleCLang policy
 if(POLICY CMP0025)
     
@@ -33,6 +37,6 @@ if(POLICY CMP0025)
 endif()
 
 # Enable Position Independent Executables (ASLR) policy
-if(POLICY CMP0083)
+if(NOT (CMAKE_VERSION VERSION_LESS 3.14))
     cmake_policy(SET CMP0083 NEW)
 endif()

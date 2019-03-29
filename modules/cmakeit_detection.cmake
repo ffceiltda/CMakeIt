@@ -23,11 +23,11 @@
 # cmakeit_detection.cmake - perform detection of toolset, compiler and target that will be used for build
 #
 
-include(cmakeit_target_platform_detection)
-include(cmakeit_compiler_detection)
-include(cmakeit_toolset_detection)
-include(cmakeit_target_architecture_detection)
-include(cmakeit_build_type_detection)
+include(cmakeit_target_platform_detection NO_POLICY_SCOPE)
+include(cmakeit_compiler_detection NO_POLICY_SCOPE)
+include(cmakeit_toolset_detection NO_POLICY_SCOPE)
+include(cmakeit_target_architecture_detection NO_POLICY_SCOPE)
+include(cmakeit_build_type_detection NO_POLICY_SCOPE)
 
 if(NOT CMAKEIT_HIDE_BANNER)
 

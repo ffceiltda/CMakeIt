@@ -28,7 +28,7 @@ set(CMAKEIT_MODULE_OUTPUT_CONFIGURED_DIR "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles
 set(CMAKEIT_MODULE_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}")
 
 # Detect subtree layout...
-include(cmakeit_module_subtree_layout_detection)
+include(cmakeit_module_subtree_layout_detection NO_POLICY_SCOPE)
 
 # Glob files for build generation
 if(CMAKEIT_MODULE_PRIVATE_HEADER_DIR)

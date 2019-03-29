@@ -30,7 +30,7 @@ endif()
 
 # Check if a conifugre hook is attached...
 if(CMAKEIT_CONFIGURE_HOOK)
-	include(${CMAKEIT_CONFIGURE_HOOK})
+	include(${CMAKEIT_CONFIGURE_HOOK} NO_POLICY_SCOPE)
 endif()
 
 if(NOT CMAKEIT_HIDE_BANNER)

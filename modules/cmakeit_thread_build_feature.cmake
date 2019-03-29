@@ -20,14 +20,9 @@
 #
 
 #
-# cmakeit_features.cmake - CMakeIt defaults for CMake policies
+# cmakeit_thread_build_feature.cmake - check if threads are supported
 #
 
-include(cmakeit_pch_feature)
-include(cmakeit_pie_feature)
-include(cmakeit_thread_feature)
-include(cmakeit_spectre_mitigations_feature)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
 
-if(NOT CMAKEIT_HIDE_BANNER)
-    message(STATUS "")
-endif()
+find_package(Threads REQUIRED)

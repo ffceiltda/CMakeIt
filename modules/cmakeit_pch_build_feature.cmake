@@ -20,9 +20,23 @@
 #
 
 #
-# cmakeit_pie_feature.cmake - check if PIE (ASLR) executables are supported
+# cmakeit_pch_build_feature.cmake - CMakeIt pre-compiled header support detection for target
+#   compiler / architecture / platform
 #
 
-include(CheckPIESupported)
+# MinGW / Cygwin binutils/GCC doesn't play well with PCH...
+if(MINGW OR CYGWIN)
+	set(CMAKEIT_COMPILER_NO_PCH ON)
+endif()
 
-check_pie_supported()
+# If compiler is unrecognized, skip PCH support
+if(NOT CMAKEIT_COMPILER_PCH_SUFFIX)
+	set(CMAKEIT_COMPILER_NO_PCH ON)
+else()
+	unset(CMAKEIT_COMPILER_NO_PCH)
+endif()
+
+# Unset CMAKEIT_COMPILER_PCH_SUFFIX if was set before but CMAKEIT_COMPILER_NO_PCH was detected
+if(CMAKEIT_COMPILER_NO_PCH)
+	unset(CMAKEIT_COMPILER_PCH_SUFFIX)
+endif()

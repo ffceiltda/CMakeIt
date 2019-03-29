@@ -36,7 +36,7 @@ set(CMAKEIT_VERSION_MINOR 0)
 #
 # CMAKEIT_REVISION_NUMBER - the revision_number of CMakeIt build system
 #
-set(CMAKEIT_REVISION_NUMBER 3)
+set(CMAKEIT_REVISION_NUMBER 4)
 
 #
 # CMAKEIT_VERSION - the full version string of CMakeIt build system

@@ -24,7 +24,7 @@
 #
 
 # We requires CMake 3.14 to things work correcly
-cmake_minimum_required(VERSION 3.14.0)
+cmake_minimum_required(VERSION 3.12.0)
 
 #
 # CMAKEIT_INCLUDED - set if CMakeIt was previously included, act as include guard
@@ -51,27 +51,27 @@ if(CMAKEIT_ROOT)
 endif()
 
 # Shows banner of CMake when called (and not configured to hide)
-include(cmakeit_banner)
+include(cmakeit_banner NO_POLICY_SCOPE)
 
 # Configure variables to bootstrap CMakeIt
-include(cmakeit_version)
-include(cmakeit_variables)
-include(cmakeit_constants)
-
-# Include external CMakeIt modules used
-include(cmakeit_external_modules)
-
-# Include custom CMakeIt functions
-include(cmakeit_functions)
+include(cmakeit_version NO_POLICY_SCOPE)
+include(cmakeit_variables NO_POLICY_SCOPE)
+include(cmakeit_constants NO_POLICY_SCOPE)
 
 # Enable CMake policies
-include(cmakeit_policies)
+include(cmakeit_policies NO_POLICY_SCOPE)
+
+# Include external CMakeIt modules used
+include(cmakeit_external_modules NO_POLICY_SCOPE)
+
+# Include custom CMakeIt functions
+include(cmakeit_functions NO_POLICY_SCOPE)
 
 # Perform detection of toolset, compiler and target that will be used for build
-include(cmakeit_detection)
+include(cmakeit_detection NO_POLICY_SCOPE)
 
 # Basic CMake features needed
-include(cmakeit_features)
+include(cmakeit_build_features NO_POLICY_SCOPE)
 
 # Define CMAKEIT_INCLUDED for next phase of build scripts
 set(CMAKEIT_INCLUDED ON)

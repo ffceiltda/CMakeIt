@@ -26,4 +26,4 @@
 
 set(CMAKEIT_MODULE_SUBTYPE ${CMAKEIT_MODULE_SUBTYPE_UI})
 
-include(cmakeit_application_module_template)
+include(cmakeit_application_module_template NO_POLICY_SCOPE)

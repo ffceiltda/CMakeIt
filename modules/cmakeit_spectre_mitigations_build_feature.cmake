@@ -1,4 +1,4 @@
-﻿#
+#
 # CMakeIt - a collection of CMake modules to build programs from 'Visual Studio'-like 
 # projects, and well-structure project layouts (public and private include folders,
 # source folders), using CMake build system. Also features pre compiled headers
@@ -20,7 +20,7 @@
 #
 
 #
-# cmakeit_spectre_mitigations_detection.cmake - CMakeIt pre-compiled header support detection for target
+# cmakeit_spectre_mitigations_build_features.cmake - CMakeIt pre-compiled header support detection for target
 #   compiler / architecture / platform
 #
 
@@ -111,7 +111,7 @@ if(NOT CMAKEIT_COMPILER_NO_SPECTRE_MITIGATIONS)
     unset(CMAKEIT_COMPILER_SPECTRE_MITIGATION_LINKER_FLAGS)
 
     if(NOT INTERNAL_CMAKEIT_REQUIRED_QUIET)
-        message(STATUS "Detecting if compiler support SPECTRE mitigations...")
+        message(STATUS "Check if compiler support SPECTRE mitigations...")
     endif()
 
     if(CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_VISUAL_C})
@@ -198,18 +198,18 @@ if(NOT CMAKEIT_COMPILER_NO_SPECTRE_MITIGATIONS)
         
         if(NOT INTERNAL_CMAKEIT_REQUIRED_QUIET)
         
-            message(STATUS "Detecting if compiler support SPECTRE mitigations... - done")
-            message(STATUS "Detecting if linker support SPECTRE mitigations...")
+            message(STATUS "Check if compiler support SPECTRE mitigations... - done")
+            message(STATUS "Check if linker support SPECTRE mitigations...")
 
         endif()
 
         if((CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_CLANG}) OR (CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_GCC}))
 
-            check_cxx_compiler_flag("-shared -Wl,-z,retpolineplt" INTERNAL_SPECTRE_MITIGATION_RETPOLINE_PLT)
+            check_cxx_compiler_flag("-Wl,-z,retpolineplt" INTERNAL_SPECTRE_MITIGATION_RETPOLINE_PLT)
 
             if(INTERNAL_SPECTRE_MITIGATION_RETPOLINE_PLT)
 
-                list(APPEND CMAKEIT_COMPILER_SPECTRE_MITIGATION_LINKER_FLAGS -shared -Wl,-z,retpolineplt)
+                list(APPEND CMAKEIT_COMPILER_SPECTRE_MITIGATION_LINKER_FLAGS "-Wl,-z,retpolineplt")
 
                 unset(INTERNAL_SPECTRE_MITIGATION_RETPOLINE_PLT)
 
@@ -220,9 +220,9 @@ if(NOT CMAKEIT_COMPILER_NO_SPECTRE_MITIGATIONS)
         if(NOT INTERNAL_CMAKEIT_REQUIRED_QUIET)
 
             if(CMAKEIT_COMPILER_SPECTRE_MITIGATION_COMPILER_FLAGS)    
-                message(STATUS "Detecting if linker support SPECTRE mitigations... - done")
+                message(STATUS "Check if linker support SPECTRE mitigations... - done")
             else()
-                message(STATUS "Detecting if linker support SPECTRE mitigations... - NOTFOUND")
+                message(STATUS "Check if linker support SPECTRE mitigations... - NOTFOUND")
             endif()
         
         endif()
@@ -230,7 +230,7 @@ if(NOT CMAKEIT_COMPILER_NO_SPECTRE_MITIGATIONS)
     else()
 
         if(NOT INTERNAL_CMAKEIT_REQUIRED_QUIET)
-            message(STATUS "Detecting if compiler support SPECTRE mitigations... - NOTFOUND")
+            message(STATUS "Check if compiler support SPECTRE mitigations... - NOTFOUND")
         endif()
 
     endif()

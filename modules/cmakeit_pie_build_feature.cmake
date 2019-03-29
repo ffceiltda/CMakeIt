@@ -20,23 +20,33 @@
 #
 
 #
-# cmakeit_pch_feature.cmake - CMakeIt pre-compiled header support detection for target
-#   compiler / architecture / platform
+# cmakeit_pie_build_feature.cmake - check if PIE (ASLR) executables are supported
 #
 
-# MinGW / Cygwin binutils/GCC doesn't play well with PCH...
-if(MINGW OR CYGWIN)
-	set(CMAKEIT_COMPILER_NO_PCH ON)
-endif()
+if(NOT (CMAKE_VERSION VERSION_LESS 3.14))
 
-# If compiler is unrecognized, skip PCH support
-if(NOT CMAKEIT_COMPILER_PCH_SUFFIX)
-	set(CMAKEIT_COMPILER_NO_PCH ON)
-else()
-	unset(CMAKEIT_COMPILER_NO_PCH)
-endif()
+	if(NOT INTERNAL_CMAKEIT_REQUIRED_QUIET)
 
-# Unset CMAKEIT_COMPILER_PCH_SUFFIX if was set before but CMAKEIT_COMPILER_NO_PCH was detected
-if(CMAKEIT_COMPILER_NO_PCH)
-	unset(CMAKEIT_COMPILER_PCH_SUFFIX)
+		if(NOT CMAKEIT_HIDE_BANNER)
+			message(STATUS "Check if compiler support ASLR...")
+		endif()
+
+	endif()
+
+	unset(INTERNAL_CMAKEIT_SUPPORT_PIE)
+
+	check_pie_supported(LANGUAGES CXX)
+
+	if(NOT INTERNAL_CMAKEIT_REQUIRED_QUIET)
+
+		if(CMAKE_CXX_LINK_PIE_SUPPORTED)    
+			message(STATUS "Check if compiler support ASLR... - done")
+		else()
+			message(STATUS "Check if compiler support ASLR... - NOTFOUND")
+		endif()
+
+	endif()
+
+	unset(INTERNAL_CMAKEIT_SUPPORT_PIE)
+	
 endif()

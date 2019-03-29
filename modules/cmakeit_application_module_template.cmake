@@ -25,4 +25,4 @@
 
 set(CMAKEIT_MODULE_TYPE ${CMAKEIT_MODULE_TYPE_APPLICATION})
 
-include(cmakeit_module_template)
+include(cmakeit_module_template NO_POLICY_SCOPE)

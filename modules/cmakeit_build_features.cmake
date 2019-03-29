@@ -20,9 +20,19 @@
 #
 
 #
-# cmakeit_library_module_template.cmake - CMakeIt base library module template declaration
+# cmakeit_build_features.cmake - CMakeIt defaults for CMake policies
 #
 
-set(CMAKEIT_MODULE_TYPE ${CMAKEIT_MODULE_TYPE_LIBRARY})
+if(NOT CMAKEIT_HIDE_BANNER)
+    message(STATUS "Checking CMake build features...")
+endif()
 
-include(cmakeit_module_template NO_POLICY_SCOPE)
+include(cmakeit_pch_build_feature NO_POLICY_SCOPE)
+include(cmakeit_pie_build_feature NO_POLICY_SCOPE)
+include(cmakeit_ipo_build_feature NO_POLICY_SCOPE)
+include(cmakeit_spectre_mitigations_build_feature NO_POLICY_SCOPE)
+include(cmakeit_thread_build_feature NO_POLICY_SCOPE)
+
+if(NOT CMAKEIT_HIDE_BANNER)
+    message(STATUS "")
+endif()
