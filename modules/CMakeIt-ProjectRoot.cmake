@@ -43,14 +43,36 @@ foreach(MODULE ${INTERNAL_GLOB_PROJECT_MODULES})
 
 		if(MODULE MATCHES "/CMakeLists.txt$")
 
-			# TODO : IGNORE PATH IN LIST...
+			if(CMAKEIT_EXCLUDE_DIRECTORIES)
 
-			string(REPLACE "/CMakeLists.txt" "" MODULE_DIRECTORY ${MODULE})
-			message(STATUS "+-- Found CMake project module in ${MODULE_DIRECTORY} ...")
+				foreach(EXCLUDE_DIRECTORY ${CMAKEIT_EXCLUDE_DIRECTORIES})
+		
+					if(NOT INTERNAL_CMAKEIT_IGNORE_PREFIX_RESULT)
+
+						string(FIND ${MODULE} ${EXCLUDE_DIRECTORY} FIND_INDEX)
+
+						if(FIND_INDEX EQUAL 0)
+							set(INTERNAL_CMAKEIT_IGNORE_PREFIX_RESULT ON)
+						endif()
+		
+					endif()
+
+				endforeach()
+
+			endif()
+
+			if(NOT INTERNAL_CMAKEIT_IGNORE_PREFIX_RESULT)
+			
+				string(REPLACE "/CMakeLists.txt" "" MODULE_DIRECTORY ${MODULE})
+				message(STATUS "+-- Found CMake project module in ${MODULE_DIRECTORY} ...")
 	
-			add_subdirectory(${MODULE_DIRECTORY})
+				add_subdirectory(${MODULE_DIRECTORY})
 
-			math(EXPR CMAKEIT_PROJECT_MODULE_COUNT "${CMAKEIT_PROJECT_MODULE_COUNT} + 1")
+				math(EXPR CMAKEIT_PROJECT_MODULE_COUNT "${CMAKEIT_PROJECT_MODULE_COUNT} + 1")
+
+				list(APPEND CMAKEIT_EXCLUDE_DIRECTORIES ${MODULE_DIRECTORY})
+
+			endif()
 
 		endif()
 
