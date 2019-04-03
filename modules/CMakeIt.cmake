@@ -24,7 +24,7 @@
 #
 
 # We requires CMake 3.14 to things work correcly
-cmake_minimum_required(VERSION 3.12.0)
+cmake_minimum_required(VERSION 3.10.0)
 
 #
 # CMAKEIT_INCLUDED - set if CMakeIt was previously included, act as include guard
