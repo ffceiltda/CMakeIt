@@ -48,7 +48,7 @@ function(cmakeit_ignore_prefix FILENAME RESULT)
 
 	endforeach()
 
-	set(${RESULT} INTERNAL_CMAKEIT_IGNORE_PREFIX_RESULT)
+	set(${RESULT} ${INTERNAL_CMAKEIT_IGNORE_PREFIX_RESULT} PARENT_SCOPE)
 
 endfunction()
 
@@ -83,7 +83,7 @@ function(cmakeit_ignore_suffix FILENAME RESULT)
 
 	endforeach()
 
-	set(${RESULT} INTERNAL_CMAKEIT_IGNORE_SUFFIX_RESULT)
+	set(${RESULT} ${INTERNAL_CMAKEIT_IGNORE_SUFFIX_RESULT} PARENT_SCOPE)
 
 endfunction()
 
