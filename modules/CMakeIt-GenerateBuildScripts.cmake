@@ -33,4 +33,5 @@ endif()
 include(cmakeit_module_target NO_POLICY_SCOPE)
 
 # Add unit test targets
-# include(cmakeit_module_unit_tests NO_POLICY_SCOPE)
+include(cmakeit_module_unit_tests_targets NO_POLICY_SCOPE)
+

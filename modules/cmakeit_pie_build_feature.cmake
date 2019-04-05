@@ -23,7 +23,7 @@
 # cmakeit_pie_build_feature.cmake - check if PIE (ASLR) executables are supported
 #
 
-if(NOT (CMAKE_VERSION VERSION_LESS 3.14))
+if((NOT (CMAKEIT_BUILD_TYPE STREQUAL ${CMAKEIT_BUILD_TYPE_DEBUG})) AND (NOT (CMAKE_VERSION VERSION_LESS 3.14)))
 
 	if(NOT INTERNAL_CMAKEIT_REQUIRED_QUIET)
 

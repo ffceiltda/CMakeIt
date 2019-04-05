@@ -25,34 +25,36 @@
 unset(CMAKEIT_SUPPORT_IPO)
 unset(CMAKEIT_SUPPORT_IPO_MANUAL)
 
-if(NOT INTERNAL_CMAKEIT_REQUIRED_QUIET)
+if(NOT (CMAKEIT_BUILD_TYPE STREQUAL ${CMAKEIT_BUILD_TYPE_DEBUG}))
+	if(NOT INTERNAL_CMAKEIT_REQUIRED_QUIET)
 
-	if(NOT CMAKEIT_HIDE_BANNER)
-		message(STATUS "Check if toolset support inter-procedural optimization...")
-	endif()
-
-endif()
-
-check_ipo_supported(RESULT CMAKEIT_SUPPORT_IPO LANGUAGES CXX)
-
-if(NOT CMAKEIT_SUPPORT_IPO)
-	
-	if(CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_VISUAL_C})
-
-		if(NOT (MSVC_VERSION LESS 1400))
-			set(CMAKEIT_SUPPORT_IPO_MANUAL ON)
+		if(NOT CMAKEIT_HIDE_BANNER)
+			message(STATUS "Check if toolset support inter-procedural optimization...")
 		endif()
 
 	endif()
 
-endif()
+	check_ipo_supported(RESULT CMAKEIT_SUPPORT_IPO LANGUAGES CXX)
 
-if(NOT INTERNAL_CMAKEIT_REQUIRED_QUIET)
+	if(NOT CMAKEIT_SUPPORT_IPO)
+	
+		if(CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_VISUAL_C})
 
-	if((NOT CMAKEIT_SUPPORT_IPO) AND (NOT CMAKEIT_SUPPORT_IPO_MANUAL))
-		message(STATUS "Check if toolset support inter-procedural optimization... - NOTFOUND")
-	else()
-		message(STATUS "Check if toolset support inter-procedural optimization... - done")
+			if(NOT (MSVC_VERSION LESS 1400))
+				set(CMAKEIT_SUPPORT_IPO_MANUAL ON)
+			endif()
+
+		endif()
+
 	endif()
 
+	if(NOT INTERNAL_CMAKEIT_REQUIRED_QUIET)
+
+		if((NOT CMAKEIT_SUPPORT_IPO) AND (NOT CMAKEIT_SUPPORT_IPO_MANUAL))
+			message(STATUS "Check if toolset support inter-procedural optimization... - NOTFOUND")
+		else()
+			message(STATUS "Check if toolset support inter-procedural optimization... - done")
+		endif()
+
+	endif()
 endif()
