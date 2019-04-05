@@ -4,7 +4,7 @@
 # source folders), using CMake build system. Also features pre compiled headers
 # support, unit tests, installation ('make install' style), packaging, etc.
 #
-# Copyright (C) 2013, Fornazin & Fornazin Consultoria em Inform√°tica Ltda
+# Copyright (C) 2013, Fornazin & Fornazin Consultoria em Inform·tica Ltda
 #
 # This library is free software; you can redistribute it and/or modify it under the
 # terms of the GNU Lesser General Public License as published by the Free Software 
@@ -20,41 +20,25 @@
 #
 
 #
-# check_ipo_build_supported.cmake - check if link-time code generation is supported
+# cmakeit_module_unit_tests_targets.cmake - CMake unit tests targets declaration
 #
-unset(CMAKEIT_SUPPORT_IPO)
-unset(CMAKEIT_SUPPORT_IPO_MANUAL)
 
-if(NOT (CMAKEIT_BUILD_TYPE STREQUAL ${CMAKEIT_BUILD_TYPE_DEBUG}))
-	if(NOT INTERNAL_CMAKEIT_REQUIRED_QUIET)
+set(INTERNAL_IS_UNITTEST OFF)
+set(INTERNAL_UNITTEST_FILENAME OFF)
 
-		if(NOT CMAKEIT_HIDE_BANNER)
-			message(STATUS "Check if toolset support inter-procedural optimization...")
-		endif()
+foreach(INTERNAL_UNITTEST_FILENAME ${CMAKEIT_MODULE_UNIT_TEST_FILES})
 
-	endif()
+	get_filename_component(INTERNAL_UNITTEST_BASENAME ${INTERNAL_UNITTEST_FILENAME})
 
-	check_ipo_supported(RESULT CMAKEIT_SUPPORT_IPO LANGUAGES CXX)
-
-	if(NOT CMAKEIT_SUPPORT_IPO)
+	set(INTERNAL_UNITTEST_TARGET_NAME "${CMAKEIT_MODULE}_${UNITTEST_NAME}" NAME_WE)
 	
-		if(CMAKEIT_COMPILER STREQUAL ${CMAKEIT_COMPILER_VISUAL_C})
+	add_executable(${INTERNAL_UNITTEST_TARGET_NAME} ${INTERNAL_UNITTEST_FILENAME})
 
-			if(NOT (MSVC_VERSION LESS 1400))
-				set(CMAKEIT_SUPPORT_IPO_MANUAL ON)
-			endif()
+	cmakeit_target_apply_build_properties(${INTERNAL_IS_UNITTEST} ${INTERNAL_UNITTEST_TARGET_NAME})
 
-		endif()
+	unset(INTERNAL_UNITTEST_TARGET_NAME)
 
-	endif()
+endforeach()
 
-	if(NOT INTERNAL_CMAKEIT_REQUIRED_QUIET)
-
-		if((NOT CMAKEIT_SUPPORT_IPO) AND (NOT CMAKEIT_SUPPORT_IPO_MANUAL))
-			message(STATUS "Check if toolset support inter-procedural optimization... - NOTFOUND")
-		else()
-			message(STATUS "Check if toolset support inter-procedural optimization... - done")
-		endif()
-
-	endif()
-endif()
+unset(INTERNAL_IS_UNITTEST)
+unset(INTERNAL_UNITTEST_FILENAME)
