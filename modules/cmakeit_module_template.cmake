@@ -264,6 +264,31 @@ unset(CMAKEIT_MODULE_SOURCE_FILES)
 unset(CMAKEIT_MODULE_RESOURCE_FILES)
 
 #
+# CMAKEIT_MODULE_EXTERNAL_PRIVATE_HEADER_FILES  the list of external private header files to add to target
+#
+unset(CMAKEIT_MODULE_EXTERNAL_PRIVATE_HEADER_FILES)
+
+#
+# CMAKEIT_MODULE_EXTERNAL_PUBLIC_HEADER_FILES (auto-generated) -the list of external public header files to add to target
+#
+unset(CMAKEIT_MODULE_EXTERNAL_PUBLIC_HEADER_FILES)
+
+#
+# CMAKEIT_MODULE_EXTERNAL_SOURCE_FILES (auto-generated) - the list of external source files to add to target
+#
+unset(CMAKEIT_MODULE_EXTERNAL_SOURCE_FILES)
+
+#
+# CMAKEIT_MODULE_EXTERNAL_RESOURCE_FILES (auto-generated) - the list of external resource files to add to target
+#
+unset(CMAKEIT_MODULE_EXTERNAL_RESOURCE_FILES)
+
+#
+# CMAKEIT_MODULE_EXTERNAL_UNIT_TEST_FILES (auto-generated) - the list of external unit tests to add to target
+#
+unset(CMAKEIT_MODULE_EXTERNAL_UNIT_TEST_FILES)
+
+#
 # CMAKEIT_MODULE_UNIT_TEST_FILES (auto-generated) - the list of unit tests found
 #
 unset(CMAKEIT_MODULE_UNIT_TEST_FILES)
@@ -342,5 +367,10 @@ else()
 
 	# Detect PCH support
 	include(cmakeit_module_pch_detection NO_POLICY_SCOPE)
+
+	# Check if a conifugre hook is attached...
+	if(CMAKEIT_TEMPLATE_HOOK)
+		include(${CMAKEIT_TEMPLATE_HOOK} NO_POLICY_SCOPE)
+	endif()
 
 endif()
