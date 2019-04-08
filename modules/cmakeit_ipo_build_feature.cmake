@@ -22,6 +22,7 @@
 #
 # check_ipo_build_supported.cmake - check if link-time code generation is supported
 #
+
 unset(CMAKEIT_SUPPORT_IPO)
 unset(CMAKEIT_SUPPORT_IPO_MANUAL)
 
