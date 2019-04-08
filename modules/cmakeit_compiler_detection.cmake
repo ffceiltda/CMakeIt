@@ -22,6 +22,7 @@
 #
 # cmakeit_compiler_detection.cmake - detect toolset used to build project
 #
+
 if(NOT CMAKEIT_HIDE_BANNER)
 	message(STATUS "Detecting compiler used for building...")
 endif()
