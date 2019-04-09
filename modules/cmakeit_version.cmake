@@ -31,12 +31,12 @@ set(CMAKEIT_VERSION_MAJOR 0)
 #
 # CMAKEIT_VERSION_MINOR - the minor version number of CMakeIt build system
 #
-set(CMAKEIT_VERSION_MINOR 0)
+set(CMAKEIT_VERSION_MINOR 1)
 
 #
 # CMAKEIT_REVISION_NUMBER - the revision_number of CMakeIt build system
 #
-set(CMAKEIT_REVISION_NUMBER 9)
+set(CMAKEIT_REVISION_NUMBER 0)
 
 #
 # CMAKEIT_VERSION - the full version string of CMakeIt build system
