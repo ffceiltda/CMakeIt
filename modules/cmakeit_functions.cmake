@@ -946,6 +946,7 @@ function(cmakeit_target_apply_build_properties IS_UNIT_TEST UNIT_TEST_NAME)
 		target_compile_options(${TARGET_NAME} PRIVATE "/Zc:forScope")
 		target_compile_options(${TARGET_NAME} PRIVATE "/Zc:wchar_t")
 		target_compile_options(${TARGET_NAME} PRIVATE "/Zc:inline")
+		target_compile_options(${TARGET_NAME} PRIVATE "/Zc:__cplusplus")
 		target_compile_options(${TARGET_NAME} PRIVATE "/diagnostics:classic")
 		target_compile_options(${TARGET_NAME} PRIVATE "/errorReport:prompt")
 		target_compile_options(${TARGET_NAME} PRIVATE "/Qpar")
@@ -958,7 +959,6 @@ function(cmakeit_target_apply_build_properties IS_UNIT_TEST UNIT_TEST_NAME)
 		if(CMAKEIT_TARGET_ARCHITECTURE STREQUAL ${CMAKEIT_TARGET_ARCHITECTURE_INTEL_X86})
 			target_compile_options(${TARGET_NAME} PRIVATE "/Oy-")
 		endif()
-
 
 		if(CMAKEIT_BUILD_TYPE STREQUAL ${CMAKEIT_BUILD_TYPE_DEBUG})
 		
@@ -973,6 +973,10 @@ function(cmakeit_target_apply_build_properties IS_UNIT_TEST UNIT_TEST_NAME)
 			target_compile_options(${TARGET_NAME} PRIVATE "/Gm-")
 			target_compile_options(${TARGET_NAME} PRIVATE "/MP")
 			target_compile_options(${TARGET_NAME} PRIVATE "/Oi")
+
+			if(IS_UNIT_TEST OR (CMAKEIT_MODULE_TYPE STREQUAL ${CMAKEIT_MODULE_TYPE_APPLICATION}))
+				target_compile_options(${TARGET_NAME} PRIVATE "/GA")
+			endif()
 
 			if(CMAKEIT_SUPPORT_IPO_MANUAL)
 				target_compile_options(${TARGET_NAME} PRIVATE "/GL")
